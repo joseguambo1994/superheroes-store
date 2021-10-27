@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import ProductComponent from '../components/ProductComponent';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
@@ -33,6 +33,11 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
 
   return (
     <View style={styles.container}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Agregar nuevo producto</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.productsContainer}>
         {
           products.map((product)=>
@@ -62,5 +67,20 @@ const styles = StyleSheet.create({
   },
   productsContainer:{
     flex: 1,
+  },
+  buttonContainer:{
+    flex: 0.1,
+  },
+  button:{
+    flexGrow:1,
+    backgroundColor: Colors.dark.purpleDark,
+    margin:10,
+    borderRadius:20,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  buttonText:{
+    color: Colors.dark.white,
+    fontSize: 22
   }
 });
