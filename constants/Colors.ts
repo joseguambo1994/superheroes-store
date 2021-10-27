@@ -8,6 +8,12 @@ export default {
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
+    purpleLight: '#cc66ff',
+    purpleDark:'#7300e6',
+    pinkLight: '#ff99cc',
+    pinkDark:'#cc3399',
+    white: '#ffffff',
+    black: '#000000'
   },
   dark: {
     text: '#fff',
@@ -15,5 +21,11 @@ export default {
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
+    purpleLight: '#cc66ff',
+    purpleDark:'#7300e6',
+    pinkLight: '#ff99cc',
+    pinkDark:'#cc3399',
+    white: '#ffffff',
+    black: '#000000'
   },
 };

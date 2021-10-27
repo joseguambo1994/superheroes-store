@@ -1,16 +1,26 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import Colors from '../constants/Colors';
 import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
+      <Text style={styles.labelText}>Email</Text>
+      <TextInput style={styles.inputText} placeholder={'jlguambo@gmail.com'}></TextInput>
+      <Text style={styles.labelText}>Password</Text>
+      <TextInput style={styles.inputText} placeholder={'********'}></TextInput>
+     <View style={styles.buttonContainer} >
+     <TouchableOpacity style={[styles.button, styles.buttonSignUp]}>
+       <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.button, styles.buttonSignIn]}>
+       <Text style={styles.buttonText}>Ingresar</Text>
+      </TouchableOpacity>
+     </View>
     </View>
   );
 }
@@ -18,16 +28,43 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  labelText:{
+    flex:0.5,
+    fontSize:20,
+    textAlignVertical:'center',
+    margin:10
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  inputText:{
+    flex:1,
+    fontSize:20,
+    backgroundColor: Colors.dark.white,
+    borderColor: Colors.dark.purpleDark,
+    borderWidth: 1,
+    borderRadius: 20,
+    margin:10,
+    padding: 10,
   },
+  buttonContainer:{
+    flex:1,
+    flexDirection:'row',
+  },
+  button:{
+    flex:1,
+    borderRadius: 20,
+    margin: 10,
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+  buttonSignUp:{
+    backgroundColor: Colors.dark.purpleDark
+  },
+  buttonSignIn:{
+    backgroundColor: Colors.dark.pinkDark
+  },
+  buttonText:{
+    color: Colors.dark.white,
+    fontSize: 20
+  }
 });
