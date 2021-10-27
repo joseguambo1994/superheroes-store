@@ -1,23 +1,59 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
+import { auth, db } from '../firebase';
 import { RootTabScreenProps } from '../types';
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+
+  const [ email, setEmail ] = useState('') 
+  const [ password, setPassword ] = useState('')
+
+  const signUp = () => {
+    auth
+    .createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      var user = userCredential.user;
+      alert('Success: '+ user?.email)
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      alert('Error '+ 'code: ' + errorCode+ 'message: '+ errorMessage)
+    });
+  }
+
+  const signIn = () => {
+    auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      navigation.navigate('TabTwo')
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      alert('Error '+ 'code: ' + errorCode+ 'message: '+ errorMessage)
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.labelText}>Email</Text>
-      <TextInput style={styles.inputText} placeholder={'jlguambo@gmail.com'}></TextInput>
+      <TextInput style={styles.inputText} placeholder={'jlguambo@gmail.com'}
+      onChangeText={(text)=>setEmail(text)}></TextInput>
       <Text style={styles.labelText}>Password</Text>
-      <TextInput style={styles.inputText} placeholder={'********'}></TextInput>
+      <TextInput style={styles.inputText} placeholder={'********'}
+      onChangeText={(text)=>setPassword(text)} secureTextEntry></TextInput>
      <View style={styles.buttonContainer} >
-     <TouchableOpacity style={[styles.button, styles.buttonSignUp]}>
+     <TouchableOpacity style={[styles.button, styles.buttonSignUp]}
+     onPress={signUp}>
        <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.buttonSignIn]}>
+      <TouchableOpacity style={[styles.button, styles.buttonSignIn]}
+      onPress={signIn}>
        <Text style={styles.buttonText}>Ingresar</Text>
       </TouchableOpacity>
      </View>
