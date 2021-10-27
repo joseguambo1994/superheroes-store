@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Colors from '../constants/Colors';
 import { Text, View } from './Themed';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface Product {
   name : string;
@@ -12,25 +13,32 @@ interface Product {
   image : string;
 }
 
-export default function ProductComponent() {
+export default function ProductComponent(props:Product) {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
           source={{
-            uri: "https://m.media-amazon.com/images/I/81D7MC4Bf7L._AC_SL1500_.jpg",
+            uri: props.image,
           }}
         ></Image>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.textDescription} >Spiderman</Text>
-        <Text style={styles.textDescription}>glass</Text>
-        <Text style={styles.textDescription}>Marvel</Text>
-        <Text style={styles.textDescription}>20</Text>
-        <Text style={styles.textDescription}>15.20</Text>
+        <Text style={styles.textDescription}>{props.name}</Text>
+        <Text style={styles.textDescription}>{props.type}</Text>
+        <Text style={styles.textDescription}>{props.publisher}</Text>
+        <Text style={styles.textDescription}>{props.stock}</Text>
+        <Text style={styles.textDescription}>{props.unitPrice}</Text>
       </View>
-      <View style={styles.buttonsContainer}></View>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.button}>
+          <FontAwesome name='edit' size={40}/>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <FontAwesome name='trash-o' size={40}/>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   imageContainer:{
-    flex:1,
+    flex:2,
     borderRadius:20,
     margin:10,
     borderColor: Colors.dark.purpleDark,
@@ -62,7 +70,14 @@ const styles = StyleSheet.create({
   },
   buttonsContainer:{
     flex:1,
-    backgroundColor:'green'
+    justifyContent:'center',
+    borderRadius:20
+    
+  },
+  button:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems:'center'
   },
   image:{
     width:'100%',
