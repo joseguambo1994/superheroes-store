@@ -17,11 +17,6 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
     const unsubscribe = navigation.addListener('focus', () => {
       
       db.collection("products").get().then((querySnapshot) => {
-        let arrayOfDocs: string[] = []
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-            arrayOfDocs.push(doc.get('name'))
-        });
         setProducts(()=> querySnapshot.docs)
     });
 
@@ -30,7 +25,32 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
     return unsubscribe;
   }, [navigation]);
 
+  const handleClickBuy = (text:string) => {
+      console.log('handleClickBuy: ' +text)
+  };
 
+
+  const handleClickEdit = (text:string) => {
+      console.log('handleClickEdit: '+text)
+      navigation.navigate('Modal',{ productId: text }  )
+  };
+
+  const handleClickDelete = (text: string) => {
+    console.log("handleClickDelete" + text);
+    db.collection("products")
+      .doc(text)
+      .delete()
+      .then(() => {
+        db.collection("products")
+          .get()
+          .then((querySnapshot) => {
+            setProducts(() => querySnapshot.docs);
+          });
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+  };
 
   const navigateToModal = () => {
     navigation.navigate('Modal')
@@ -55,6 +75,11 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
             unitPrice={doc.data().unitPrice}
             stock={doc.data().stock}
             image={doc.data().image}
+
+            handleClickBuy={handleClickBuy}
+            handleClickEdit={handleClickEdit}
+            handleClickDelete={handleClickDelete}
+
           />
           )
          

@@ -12,11 +12,28 @@ interface Product {
   unitPrice : string;
   stock : string;
   image : string;
+  handleClickBuy : (text:string) => void;
+  handleClickEdit : (text:string) => void;
+  handleClickDelete : (text:string) => void;
 }
 
 
 
+
 export default function ProductComponent(props:Product) {
+
+  const handleClickBuy = () => {
+    props.handleClickBuy( props.id );
+  }
+
+  const handleClickEdit = () => {
+    props.handleClickEdit( props.id );
+  }
+
+  const handleClickDelete = () => {
+    props.handleClickDelete( props.id );
+  }
+
   return (
     <TouchableOpacity style={styles.container} onPress={()=>console.log("Item :"+ props.id)}>
       <View style={styles.imageContainer}>
@@ -37,13 +54,13 @@ export default function ProductComponent(props:Product) {
         <Text style={styles.textDescription}>{props.unitPrice}</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={()=>console.log("buy: "+props.id)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleClickBuy()}>
           <FontAwesome name="cart-plus" size={32} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>console.log("edit: "+props.id)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleClickEdit()}>
           <FontAwesome name="edit" size={32} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>console.log("delete: "+props.id)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleClickDelete()}>
           <FontAwesome name="trash-o" size={32} />
         </TouchableOpacity>
       </View>
