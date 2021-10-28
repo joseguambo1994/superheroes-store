@@ -16,6 +16,7 @@ export default {
     black: '#000000',
     purpleTransparet:'#7300e699',
     grayLight: '#ccccb3',
+    grayDark: '#707070',
   },
   dark: {
     text: '#fff',
@@ -30,6 +31,7 @@ export default {
     white: '#ffffff',
     black: '#000000',
     purpleTransparet:'#7300e699',
-    grayLight: '#ccccb3'
+    grayLight: '#ccccb3',
+    grayDark: '#707070',
   },
 };

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import ProductComponent from '../components/ProductComponent';
@@ -20,14 +21,41 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
         setProducts(()=> querySnapshot.docs)
     });
 
+    getData()
+    getAllKeys()
+
     });
 
     return unsubscribe;
   }, [navigation]);
 
+
+  const getAllKeys = async () => {
+    let keys:any[] = []
+    try {
+      keys = await AsyncStorage.getAllKeys()
+    } catch(e) {
+      // read key error
+    }
+  
+    console.log("GETALLKEYS", keys)
+    // example console.log result:
+    // ['@MyApp_user', '@MyApp_key']
+  }
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      console.log("GETDATA()",jsonValue != null ? JSON.parse(jsonValue) : null)
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      // error reading value
+    }
+  }
+
   const handleClickBuy = (text:string) => {
       console.log('handleClickBuy: ' +text)
-      navigation.navigate('NotFound')
+      navigation.navigate('NotFound', { productId: text })
   };
 
 
