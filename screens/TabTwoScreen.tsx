@@ -12,10 +12,10 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
 
   const [ products, setProducts ] = useState(arrayOfDocs)
 
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      console.log("Screen Two got focused")
-
+      
       db.collection("products").get().then((querySnapshot) => {
         let arrayOfDocs: string[] = []
         querySnapshot.forEach((doc) => {
@@ -31,10 +31,16 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
     return unsubscribe;
   }, [navigation]);
 
+
+
+  const navigateToModal = () => {
+    navigation.navigate('Modal')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={navigateToModal}>
           <Text style={styles.buttonText}>Agregar nuevo producto</Text>
         </TouchableOpacity>
       </View>

@@ -25,7 +25,9 @@ export default function ProductComponent(props:Product) {
         ></Image>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.textDescription}>{props.name}</Text>
+        <Text style={styles.textDescription}
+        numberOfLines={1}
+        >{props.name}</Text>
         <Text style={styles.textDescription}>{props.type}</Text>
         <Text style={styles.textDescription}>{props.publisher}</Text>
         <Text style={styles.textDescription}>{props.stock}</Text>
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     flexDirection:'column',
   },
   textDescription:{
-    fontSize: 18,
+    fontSize: 16,
   },
   buttonsContainer:{
     flex:1,
