@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import ProductComponent from '../components/ProductComponent';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
@@ -22,7 +22,6 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
             console.log(doc.id, " => ", doc.data());
             arrayOfDocs.push(doc.get('name'))
         });
-        console.log(" size" , querySnapshot.docs.length)
         setProducts(()=> querySnapshot.docs)
     });
 
@@ -44,21 +43,23 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
           <Text style={styles.buttonText}>Agregar nuevo producto</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.productsContainer}>
+      <ScrollView style={styles.productsContainer}>
         {
-          products.map((product)=>
+          products.flatMap((doc) => 
             <ProductComponent
-              key={product.get('name')}
-              name={product.get('name')}
-              type={product.get('type')}
-              publisher={product.get('publisher')}
-              unitPrice={product.get('unitPrice')}
-              stock={product.get('stock')}
-              image={product.get('image')}
-            />
+            key={doc.id}
+            id={doc.id}
+            name={doc.data().name}
+            type={doc.data().type}
+            publisher={doc.data().publisher}
+            unitPrice={doc.data().unitPrice}
+            stock={doc.data().stock}
+            image={doc.data().image}
+          />
           )
+         
         }
-      </View>
+      </ScrollView>
     </View>
   );
 }

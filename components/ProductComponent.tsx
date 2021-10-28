@@ -5,6 +5,7 @@ import { Text, View } from './Themed';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface Product {
+  id : string;
   name : string;
   type : string;
   publisher: string;
@@ -13,9 +14,11 @@ interface Product {
   image : string;
 }
 
+
+
 export default function ProductComponent(props:Product) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={()=>console.log("Item :"+ props.id)}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
@@ -25,23 +28,26 @@ export default function ProductComponent(props:Product) {
         ></Image>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.textDescription}
-        numberOfLines={1}
-        >{props.name}</Text>
+        <Text style={styles.textDescription} numberOfLines={1}>
+          {props.name}
+        </Text>
         <Text style={styles.textDescription}>{props.type}</Text>
         <Text style={styles.textDescription}>{props.publisher}</Text>
         <Text style={styles.textDescription}>{props.stock}</Text>
         <Text style={styles.textDescription}>{props.unitPrice}</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button}>
-          <FontAwesome name='edit' size={40}/>
+        <TouchableOpacity style={styles.button} onPress={()=>console.log("buy: "+props.id)}>
+          <FontAwesome name="cart-plus" size={32} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <FontAwesome name='trash-o' size={40}/>
+        <TouchableOpacity style={styles.button} onPress={()=>console.log("edit: "+props.id)}>
+          <FontAwesome name="edit" size={32} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=>console.log("delete: "+props.id)}>
+          <FontAwesome name="trash-o" size={32} />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
