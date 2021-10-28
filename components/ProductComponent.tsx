@@ -35,7 +35,7 @@ export default function ProductComponent(props:Product) {
   }
 
   return (
-    <TouchableOpacity style={styles.container} onPress={()=>console.log("Item :"+ props.id)}>
+    <TouchableOpacity style={[styles.container, props.stock == '0' ? styles.containerDisabled :null ]} onPress={()=>console.log("Item :"+ props.id)}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
@@ -54,8 +54,11 @@ export default function ProductComponent(props:Product) {
         <Text style={styles.textDescription}>{props.unitPrice}</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => handleClickBuy()}>
-          <FontAwesome name="cart-plus" size={32} />
+        <TouchableOpacity style={styles.button} 
+        disabled={ props.stock == '0' }
+        onPress={() => handleClickBuy()}>
+          <FontAwesome name="cart-plus" size={32} 
+          color={ props.stock == '0' ? 'red' : Colors.dark.black }/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleClickEdit()}>
           <FontAwesome name="edit" size={32} />
@@ -78,6 +81,10 @@ const styles = StyleSheet.create({
     margin:10,
     borderRadius: 20
   },
+  containerDisabled: {
+    backgroundColor: Colors.dark.purpleLight,
+    borderWidth:0,
+  },
   imageContainer:{
     flex:2,
     borderRadius:20,
@@ -89,6 +96,7 @@ const styles = StyleSheet.create({
     flex:2,
     margin:10,
     flexDirection:'column',
+    backgroundColor:'transparent'
   },
   textDescription:{
     fontSize: 16,
@@ -96,7 +104,8 @@ const styles = StyleSheet.create({
   buttonsContainer:{
     flex:1,
     justifyContent:'center',
-    borderRadius:20
+    borderRadius:20,
+    backgroundColor:'transparent'
     
   },
   button:{
