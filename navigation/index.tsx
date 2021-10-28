@@ -40,7 +40,14 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ 
+        title: 'Agregar Producto Al Carrito',
+        presentation:'transparentModal',
+        contentStyle:{
+          flex:1,
+          backgroundColor:Colors.dark.purpleTransparet
+        }
+        }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

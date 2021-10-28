@@ -13,7 +13,8 @@ export default {
     pinkLight: '#ff99cc',
     pinkDark:'#cc3399',
     white: '#ffffff',
-    black: '#000000'
+    black: '#000000',
+    purpleTransparet:'#7300e699',
   },
   dark: {
     text: '#fff',
@@ -26,6 +27,7 @@ export default {
     pinkLight: '#ff99cc',
     pinkDark:'#cc3399',
     white: '#ffffff',
-    black: '#000000'
+    black: '#000000',
+    purpleTransparet:'#7300e699',
   },
 };

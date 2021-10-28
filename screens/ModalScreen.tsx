@@ -44,7 +44,6 @@ export default function ModalScreen({ navigation }: RootTabScreenProps<'TabTwo'>
           setUnitPrice(()=> doc.data()?.unitPrice)
           setImage(()=> doc.data()?.image)
         } else {
-          // doc.data() will be undefined in this case
           alert("No such document!");
         }
       })
@@ -67,12 +66,11 @@ export default function ModalScreen({ navigation }: RootTabScreenProps<'TabTwo'>
         stock: stock.toString(),
         image: image.toString()
       })
-      .then((docRef) => {
-        alert("Success" );
-        navigation.goBack();
-      })
+      .then(()=>
+        navigation.goBack()
+      )
       .catch((error) => {
-        alert("Error: " );
+        alert("Error: " + error);
       });
     }else {
       alert('Los campos no pueden estar vacios o con errores')

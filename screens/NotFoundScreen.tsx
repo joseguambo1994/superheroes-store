@@ -1,37 +1,37 @@
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
+import Colors from '../constants/Colors';
 
 import { RootStackScreenProps } from '../types';
 
 export default function NotFoundScreen({ navigation }: RootStackScreenProps<'NotFound'>) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>This screen doesn't exist.</Text>
-      <TouchableOpacity onPress={() => navigation.replace('Root')} style={styles.link}>
-        <Text style={styles.linkText}>Go to home screen!</Text>
-      </TouchableOpacity>
+    <View style={styles.modalContainer}>
+      <View style={styles.container}>
+        <Text>
+          Hola
+        </Text>
+        <TouchableOpacity style={{height:100, width:200, backgroundColor:Colors.dark.white}}>
+          <Text>Presionar</Text>
+            </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  modalContainer: {
+   width:'100%',
+   height:'100%',
+   justifyContent:'center',
+    backgroundColor: 'transparent'
+  },
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+    flex:0.6,
+    borderRadius:20,
+    margin:20,
+     backgroundColor:Colors.dark.purpleDark
+   },
+  
 });

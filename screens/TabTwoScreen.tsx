@@ -27,6 +27,7 @@ export default function TabTwoScreen({ navigation }: RootTabScreenProps<'TabTwo'
 
   const handleClickBuy = (text:string) => {
       console.log('handleClickBuy: ' +text)
+      navigation.navigate('NotFound')
   };
 
 
