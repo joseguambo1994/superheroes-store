@@ -48,7 +48,7 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
       const regexp = new RegExp('^[a-zA-Z0-9]{20}$')
       const arrayOfOnlyProductsKeys = keys.filter(key => regexp.test(key) )
       setProductsKeys(()=>arrayOfOnlyProductsKeys)
-      console.log(arrayOfOnlyProductsKeys)
+      console.log("GETALLKEYS",arrayOfOnlyProductsKeys)
     } catch(e) {
       alert('No se registraron productos para el cliente')
     }

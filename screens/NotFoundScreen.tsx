@@ -73,12 +73,23 @@ export default function NotFoundScreen({
   }
 
   const storeData = async (value:Object) => {
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem(productId, jsonValue)
-    } catch (e) {
-      // saving error
+
+    if ( numberOfOrderedProducts > 0 ) {
+      try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem(productId, jsonValue)
+      } catch (e) {
+        alert('Error: '+ e )
+      }
+    }else{
+      try {
+        await AsyncStorage.removeItem(productId)
+      } catch (e) {
+        alert('Error: '+ e )
+      }
     }
+
+      
   }
 
   const handleCancel = () => {

@@ -24,9 +24,8 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
           .then((doc) => {
             if (doc.exists) {
               console.log("Document data:", doc.data());
-  
+              getNumberOfOrderedProductsFromAsyncStorage()
               setName(()=>doc.data()?.name);
-              console.log("getData(prop.productId)",getData(prop.productId))
               setUniPrice(()=>doc.data()?.unitPrice);
             } else {
               // doc.data() will be undefined in this case
@@ -38,26 +37,28 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
           });
     }
 
+    const getNumberOfOrderedProductsFromAsyncStorage = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem(prop.productId)
+          if(jsonValue != null){
+              console.log('RESULTADO', JSON.parse(jsonValue).numberOfOrderedProducts)
+              const temporalNumberOfOrderedProducts = JSON.parse(jsonValue).numberOfOrderedProducts
+              setNumberOfOrderedProducts(()=> temporalNumberOfOrderedProducts )
+          }
+        } catch(e) {
+          // read error
+        }
+      }
+
     useEffect(()=>{
         console.log("product prop.productId",prop.productId)
         getProductFromDatabase()
     })
 
-    const getData = async (productId:string) => {
-        try {
-          const jsonValue = await AsyncStorage.getItem(productId)
-          console.log("GETDATA()",jsonValue != null ? JSON.parse(jsonValue) : null)
-          if (jsonValue != null){
-            const numbOfOrderedProducts = JSON.parse(jsonValue).numberOfOrderedProducts  
-            console.log("NUMB of items", numbOfOrderedProducts)
-              setNumberOfOrderedProducts(()=>numbOfOrderedProducts)
-          }
-          return jsonValue != null ? JSON.parse(jsonValue) : null;
-        } catch(e) {
-          // error reading value
-        }
-      }
-
+      useEffect(() => {
+          const subtotalTwoDecimals = (parseFloat(numberOfOrderedProducts) * parseFloat(unitPrice)).toFixed(2)
+          setSubtotal(()=> subtotalTwoDecimals)
+        }, [numberOfOrderedProducts, unitPrice]);
 
   return (
     <View style={styles.container}>
@@ -78,7 +79,7 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         </View>
         <View style={styles.textContainer}>
         <Text style={styles.text}>
-            Subtotal
+            {subtotal}
         </Text>
         </View>
     </View>
