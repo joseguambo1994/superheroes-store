@@ -1,31 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
-import { ScrollView, StyleSheet, Touchable, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import ProductReceiptComponent from '../components/ProductReceiptComponent';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import { RootTabScreenProps } from '../types';
 import { Dimensions } from 'react-native';
-
+import { db } from '../firebase';
 
   const viewportWidth = Dimensions.get('window').width;
   const viewportHeight = Dimensions.get('window').height;
 
-
-interface ProductReceipt {
-  name:string,
-  numberOfOrderedProducts: number,
-  unitPrice: number,
-  severalProductsPrice: number,
-}
-
 export interface SubtotalPerProduct {
   id: string,
+  numberOfOrderedProducts: string,
   subtotal: string,
 }
 
-const arraryOfProductsReceipts: ProductReceipt[]= []
-//let emptyArrayOfSubtotals: SubtotalPerProduct[]= []
 let mapOfSubtotals = new Map<string,string>();
 
 export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
@@ -34,10 +25,10 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
   const [ arrayOfSubtotals,setArrayOfSubtotals ] = useState(mapOfSubtotals);
   const [ totalPrice, setTotalPrice ] = useState(0.00)
   const [ hasSubtotalChange, setHasSubtotalChange ] = useState(false)
+  const [ numberOfProductsInDatabase, setNumberOfProductsInDatabase ] = useState('')
   
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      
       getAllKeys()
     });
 
@@ -47,7 +38,7 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
 
   useEffect(()=>{
     setArrayOfSubtotals(()=>mapOfSubtotals)
-  },[ productsKeys ])
+  })
 
   const getAllKeys = async () => {
     let keys:string[] = []
@@ -55,39 +46,92 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
       keys = await AsyncStorage.getAllKeys()
       const regexp = new RegExp('^[a-zA-Z0-9]{20}$')
       const arrayOfOnlyProductsKeys = keys.filter(key => regexp.test(key) )
-      setProductsKeys(()=>arrayOfOnlyProductsKeys)
+      setProductsKeys(() => arrayOfOnlyProductsKeys)
     } catch(e) {
       alert('No se registraron productos para el cliente')
     }
+  }
+
+  useEffect(()=>{    
+    calculateTotalPrice()
+  }, [hasSubtotalChange])
+  
+  const calculateTotalPrice = () => {
+    let sum = 0.00;
+    arrayOfSubtotals.forEach(item=>
+      sum += parseFloat(item)
+      )
+      setTotalPrice( () => parseFloat(sum.toFixed(2)))
+  }
+  
+  const handlePay = ()=> {
+   productsKeys.map(async item=>{
+    const temporal = getStockFromLocalStorage(item)
+    if (temporal != null && temporal != undefined){
+      updateProductInDatabase(item, numberOfProductsInDatabase.toString())
+    }
+   })
+    alert("Pagado")
+  }
+
+
+  const updateProductInDatabase = async (documentId:string, numberOfProducts:string) => {  
+    db.collection("products")
+      .doc(documentId)
+      .update({
+        stock: numberOfProducts
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  };
+
+  const getStockFromLocalStorage = async (productId:string) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(productId)
+      if(jsonValue != null){
+        console.log("thaos",JSON.parse(jsonValue).numberOfCurrentAvilableProducts)
+        setNumberOfProductsInDatabase(()=>JSON.parse(jsonValue).numberOfCurrentAvilableProducts)
+      }
+      return jsonValue != null ? JSON.parse(jsonValue) : null
+    } catch(e) {
+      // read error
+    }
+    console.log('Done.')
   }
 
   const getSubtotalPrice = (subtotalPerProduct : SubtotalPerProduct ) => {
     if (parseFloat(subtotalPerProduct.subtotal) > 0){
       const productIdTemporal = subtotalPerProduct.id
       const subtotalTemporal = subtotalPerProduct.subtotal
-      setArrayOfSubtotals( (prevState) => ( prevState.set(productIdTemporal,subtotalTemporal) ));
-      setHasSubtotalChange(()=>!hasSubtotalChange)
+      setArrayOfSubtotals( (prevState) => {
+        let mapCopy = prevState;
+        mapCopy.set(productIdTemporal,subtotalTemporal)
+        return mapCopy ;
+      }
+      );
+      setHasSubtotalChange(()=> !hasSubtotalChange )
     }
   }
 
-  useEffect(()=>{    
-    console.log("arrayOfSubtotals",arrayOfSubtotals)
-    let sum = 0.00;
-    arrayOfSubtotals.forEach(item=>
-      sum += parseFloat(item)
-      )
-      setTotalPrice(()=>sum)
-  }, [hasSubtotalChange])
+  const handleDelete = (productId: string) => {
+      console.log("REMOVE",productId)
+      removeKeyFromLocalStorage(productId)
+      getAllKeys()
+  }
 
-  const clearAllAsyncStorage = async () => {
+  const removeKeyFromLocalStorage = async (productId:string) => {
     try {
-      await AsyncStorage.clear()
-      setTotalPrice(()=>0.00)
+      await AsyncStorage.removeItem(productId)
     } catch(e) {
-      // clear error
+      // remove error
     }
-  }
   
+    console.log('Done.')
+  }
 
   return (
     <View style={styles.container}>
@@ -96,21 +140,27 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
         {
           productsKeys.flatMap(productKey=>
             <ProductReceiptComponent key={productKey} productId={productKey}
-            getSubtotalPriceCallback={getSubtotalPrice}
+            getSubtotalPriceCallback={getSubtotalPrice} handleDelete={handleDelete}
             />
           )
         }
       </ScrollView>
-      <View style={styles.totalPriceContainer}>
+      {
+        productsKeys.length != 0 ? <View style={styles.totalPriceContainer}>
         
-      <Text style={styles.totalPriceText}> $ {totalPrice}</Text>
-        <Text style={styles.totalPriceLabel}>TOTAL: {''}</Text>
-      </View>
-      <View style={styles.payContainer}>
+        <Text style={styles.totalPriceText}> $ {totalPrice}</Text>
+          <Text style={styles.totalPriceLabel}>TOTAL: {''}</Text>
+        </View>
+         : null
+      }
+     {
+        productsKeys.length != 0 ?
+        <View style={styles.payContainer} >
         <TouchableOpacity style={styles.payButton}>
-          <Text style={styles.payText} onPress={()=>clearAllAsyncStorage()}> Pagar </Text>
+          <Text style={styles.payText} onPress={()=> handlePay()}> Pagar </Text>
         </TouchableOpacity>
-      </View>
+      </View>:null
+     }
     </View>
   );
 }

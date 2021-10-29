@@ -6,10 +6,12 @@ import { db } from '../firebase';
 import { Text, View } from './Themed';
 import { Dimensions } from 'react-native';
 import { SubtotalPerProduct } from '../screens/TabThreeScreen';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface ProductReceipt {
     productId: string,
-    getSubtotalPriceCallback:  (subtotalPerProduct : SubtotalPerProduct) => void
+    getSubtotalPriceCallback:  (subtotalPerProduct : SubtotalPerProduct) => void,
+    handleDelete : (productId: string) => void
   }
 
   const viewportWidth = Dimensions.get('window').width;
@@ -30,7 +32,6 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
             .get()
             .then((doc) => {
               if (doc.exists) {
-                console.log("Document data:", doc.data());
                 getNumberOfOrderedProductsFromAsyncStorage()
                 setName(()=>doc.data()?.name);
                 setUniPrice(()=>doc.data()?.unitPrice);
@@ -48,7 +49,6 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         try {
           const jsonValue = await AsyncStorage.getItem(prop.productId)
           if(jsonValue != null){
-              console.log('RESULTADO', JSON.parse(jsonValue).numberOfOrderedProducts)
               const temporalNumberOfOrderedProducts = JSON.parse(jsonValue).numberOfOrderedProducts
               setNumberOfOrderedProducts(()=> temporalNumberOfOrderedProducts )
           }
@@ -58,7 +58,6 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
       }
 
     useEffect(()=>{
-        console.log("product prop.productId",prop.productId)
         getProductFromDatabase()
     })
 
@@ -68,16 +67,21 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         }, [numberOfOrderedProducts, unitPrice]);
 
     useEffect(()=>{
-      console.log("subtotal useEffect")
       const subtotalPerProduct = {
         id: prop.productId,
-        subtotal: subtotal
+        subtotal: subtotal,
+        numberOfOrderedProducts: numberOfOrderedProducts,
       }
         prop.getSubtotalPriceCallback(subtotalPerProduct)
     }, [subtotal])
 
   return (
     <View style={styles.container}>
+       <View style={styles.removeContainer}>
+        <TouchableOpacity onPress={()=> prop.handleDelete(prop.productId)}>
+        <FontAwesome name={'trash'} size={40} color={Colors.dark.purpleDark}/>
+        </TouchableOpacity>
+        </View>
         <View style={styles.nameContainer}>
         <Text style={[styles.text]} numberOfLines={2} >
             {name}
@@ -94,7 +98,7 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         </Text>
         </View>
         <View style={styles.textContainer}>
-        <Text style={styles.text}>
+        <Text style={styles.text} >
             {subtotal}
         </Text>
         </View>
@@ -117,6 +121,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius:20,
     borderBottomLeftRadius:20,
     padding:10,
+  },
+  removeContainer:{
+    backgroundColor:'transparent',
+    justifyContent:'center',
+    alignItems:'center',
+    paddingEnd:5,
+  },
+  removeButton:{
+    flexGrow:1
   },
   textContainer:{
     flex:1,

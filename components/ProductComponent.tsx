@@ -48,10 +48,10 @@ export default function ProductComponent(props:Product) {
         <Text style={styles.textDescription} numberOfLines={1}>
           {props.name}
         </Text>
-        <Text style={styles.textDescription}>{props.type}</Text>
-        <Text style={styles.textDescription}>{props.publisher}</Text>
-        <Text style={styles.textDescription}>{props.stock}</Text>
-        <Text style={styles.textDescription}>{props.unitPrice}</Text>
+        <Text style={styles.textDescription} numberOfLines={1}>{props.type}</Text>
+        <Text style={styles.textDescription} numberOfLines={1}>Empresa: {props.publisher}</Text>
+        <Text style={styles.textDescription} numberOfLines={1}>Stock: {props.stock}</Text>
+        <Text style={styles.textDescription} numberOfLines={1}>$ {props.unitPrice}</Text>
       </View>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.button} 

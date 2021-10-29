@@ -69,32 +69,33 @@ function BottomTabNavigator() {
       initialRouteName="TabOne"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarStyle: {backgroundColor:Colors.dark.purpleDark,}
       }}>
       <BottomTab.Screen
         name="TabOne"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Registro e Inicio de Sesión',
-          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Login',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:30},
+          tabBarIcon: ({ color }) => <TabBarIcon name="user-circle-o" color={Colors.dark.white} />,
         })}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          title: 'Listado de Productos',
-          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Productos',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:30},
+          tabBarIcon: ({ color }) => <TabBarIcon name="gift" color={Colors.dark.white} />,
         }}
       />
        <BottomTab.Screen
         name="TabThree"
         component={TabThreeScreen}
         options={{
-          title: 'Carrito de Compras',
-          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Pagar',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:30},
+          tabBarIcon: ({ color }) => <TabBarIcon name="money" color={Colors.dark.white} />,
         }}
       />
     </BottomTab.Navigator>
@@ -108,5 +109,5 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={36} style={{ marginBottom: -3 }} {...props} />;
 }

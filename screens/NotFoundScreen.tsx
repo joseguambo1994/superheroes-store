@@ -66,6 +66,8 @@ export default function NotFoundScreen({
   const handleConfirm = () => {
     var sale = { 
       numberOfOrderedProducts: numberOfOrderedProducts.toString(), 
+      stock: stock.toString(),
+      numberOfCurrentAvilableProducts : (stock-numberOfOrderedProducts).toString()
    }; 
    storeData(sale);
 
@@ -100,7 +102,7 @@ export default function NotFoundScreen({
     <View style={styles.modalContainer}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text style={styles.text}>{name}</Text>
+          <Text style={styles.text} numberOfLines={1}>{name}</Text>
           <Text style={styles.text}>
             Disponibles: {numberOfAvailableProducts}
           </Text>

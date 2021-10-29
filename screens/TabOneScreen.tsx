@@ -16,6 +16,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+  
        clearAllAsyncStorage()
     });
 
