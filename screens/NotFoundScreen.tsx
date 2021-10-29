@@ -65,7 +65,6 @@ export default function NotFoundScreen({
 
   const handleConfirm = () => {
     var sale = { 
-      productId: productId, 
       numberOfOrderedProducts: numberOfOrderedProducts.toString(), 
    }; 
    storeData(sale);
@@ -76,7 +75,7 @@ export default function NotFoundScreen({
   const storeData = async (value:Object) => {
     try {
       const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('@storage_Key', jsonValue)
+      await AsyncStorage.setItem(productId, jsonValue)
     } catch (e) {
       // saving error
     }
