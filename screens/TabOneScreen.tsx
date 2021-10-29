@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import { StyleSheet, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import { Text, View } from '../components/Themed';
 import Colors from '../constants/Colors';
 import { auth, db } from '../firebase';
 import { RootTabScreenProps } from '../types';
+
+
+const image = { uri: "https://c4.wallpaperflare.com/wallpaper/344/1011/606/thanos-marvel-comics-villains-digital-art-wallpaper-preview.jpg" };
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 
@@ -60,7 +61,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   
 
   return (
-    <View style={styles.container}>
+    <View style={styles.bigContainer}>
+     <ImageBackground style={styles.imageBackground}  source={image} resizeMode="cover">
+     <View style={styles.container}>
       <Text style={styles.labelText}>Email</Text>
       <TextInput style={styles.inputText} placeholder={'jlguambo@gmail.com'}
       onChangeText={(text)=>setEmail(text)}></TextInput>
@@ -78,22 +81,35 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       </TouchableOpacity>
      </View>
     </View>
+     </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  bigContainer:{
+    flex:1,
+    justifyContent:'center',
+  },
   container: {
-    flex: 1,
+    flex: 0.6,
     justifyContent: 'center',
+    backgroundColor:'transparent',
+  },
+  imageBackground:{
+    flex: 1,
+    justifyContent: "center",
+    
   },
   labelText:{
     flex:0.5,
     fontSize:20,
     textAlignVertical:'center',
-    margin:10
+    margin:10,
+    color:Colors.dark.white
   },
   inputText:{
-    flex:1,
+    flex:0.5,
     fontSize:20,
     backgroundColor: Colors.dark.white,
     borderColor: Colors.dark.purpleDark,
@@ -105,6 +121,7 @@ const styles = StyleSheet.create({
   buttonContainer:{
     flex:1,
     flexDirection:'row',
+    backgroundColor:'transparent'
   },
   button:{
     flex:1,

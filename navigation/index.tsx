@@ -74,29 +74,17 @@ function BottomTabNavigator() {
         name="TabOne"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
+          title: 'Registro e Inicio de Sesión',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
         })}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
+          title: 'Listado de Productos',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
@@ -104,7 +92,8 @@ function BottomTabNavigator() {
         name="TabThree"
         component={TabThreeScreen}
         options={{
-          title: 'Tab Three',
+          title: 'Carrito de Compras',
+          headerTitleStyle:{color:Colors.dark.purpleDark, fontSize:26},
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
