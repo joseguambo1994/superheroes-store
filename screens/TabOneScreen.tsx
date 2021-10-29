@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -11,6 +12,14 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   const [ email, setEmail ] = useState('') 
   const [ password, setPassword ] = useState('')
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+       clearAllAsyncStorage()
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const signUp = () => {
     auth
@@ -38,6 +47,17 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       alert('Error '+ 'code: ' + errorCode+ 'message: '+ errorMessage)
     });
   }
+
+  const clearAllAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear()
+    } catch(e) {
+      // clear error
+    }
+  
+    console.log('Done.')
+  }
+  
 
   return (
     <View style={styles.container}>

@@ -4,10 +4,16 @@ import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Colors from '../constants/Colors';
 import { db } from '../firebase';
 import { Text, View } from './Themed';
+import { Dimensions } from 'react-native';
+import { SubtotalPerProduct } from '../screens/TabThreeScreen';
 
 interface ProductReceipt {
-    productId: string
+    productId: string,
+    getSubtotalPriceCallback:  (subtotalPerProduct : SubtotalPerProduct) => void
   }
+
+  const viewportWidth = Dimensions.get('window').width;
+  const viewportHeight = Dimensions.get('window').height;
 
 export default function ProductReceiptComponent(prop: ProductReceipt) {
 
@@ -17,24 +23,25 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
     const [subtotal, setSubtotal] = useState('');
 
     const getProductFromDatabase = () => {
-        var docRef = db.collection("products").doc(prop.productId);
+        if (prop.productId != null && prop.productId != '' && prop.productId != undefined){
+          var docRef = db.collection("products").doc(prop.productId);
 
-        docRef
-          .get()
-          .then((doc) => {
-            if (doc.exists) {
-              console.log("Document data:", doc.data());
-              getNumberOfOrderedProductsFromAsyncStorage()
-              setName(()=>doc.data()?.name);
-              setUniPrice(()=>doc.data()?.unitPrice);
-            } else {
-              // doc.data() will be undefined in this case
-              console.log("No such document!");
-            }
-          })
-          .catch((error) => {
-            console.log("Error getting document:", error);
-          });
+          docRef
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                console.log("Document data:", doc.data());
+                getNumberOfOrderedProductsFromAsyncStorage()
+                setName(()=>doc.data()?.name);
+                setUniPrice(()=>doc.data()?.unitPrice);
+              } else {
+                console.log("No such document!");
+              }
+            })
+            .catch((error) => {
+              console.log("Error getting document:", error);
+            });
+        }
     }
 
     const getNumberOfOrderedProductsFromAsyncStorage = async () => {
@@ -59,6 +66,15 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
           const subtotalTwoDecimals = (parseFloat(numberOfOrderedProducts) * parseFloat(unitPrice)).toFixed(2)
           setSubtotal(()=> subtotalTwoDecimals)
         }, [numberOfOrderedProducts, unitPrice]);
+
+    useEffect(()=>{
+      console.log("subtotal useEffect")
+      const subtotalPerProduct = {
+        id: prop.productId,
+        subtotal: subtotal
+      }
+        prop.getSubtotalPriceCallback(subtotalPerProduct)
+    }, [subtotal])
 
   return (
     <View style={styles.container}>
@@ -88,7 +104,8 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    width: viewportWidth,
+    height: viewportHeight/10,
     backgroundColor: 'transparent',
     marginStart:10,
     marginVertical:10,
