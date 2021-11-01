@@ -7,6 +7,7 @@ import { Text, View } from './Themed';
 import { Dimensions } from 'react-native';
 import { SubtotalPerProduct } from '../screens/TabThreeScreen';
 import { FontAwesome } from '@expo/vector-icons';
+import { MotiView, AnimatePresence  } from 'moti'
 
 interface ProductReceipt {
     productId: string,
@@ -23,6 +24,7 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
     const [numberOfOrderedProducts, setNumberOfOrderedProducts] = useState('');
     const [unitPrice, setUniPrice] = useState('');
     const [subtotal, setSubtotal] = useState('');
+    const [visible, setVisible] = useState(true)
 
     const getProductFromDatabase = () => {
         if (prop.productId != null && prop.productId != '' && prop.productId != undefined){
@@ -83,14 +85,26 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         subtotal: '0.00',
         numberOfOrderedProducts: numberOfOrderedProducts,
       }
+      setVisible((s)=>!s)
       prop.getSubtotalPriceCallback(zeroedSubtotalPerProduct)
       prop.handleDelete(prop.productId)
+
     }
 
     
 
   return (
-    <View style={styles.container}>
+ 
+    <AnimatePresence>
+       {visible && (
+    <MotiView 
+        from={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{
+         opacity: 0, scale: 0.5 
+      }}
+    
+    style={styles.container}>
        <View style={styles.removeContainer}>
         <TouchableOpacity onPress={handleDeleteOnChildren}>
         <FontAwesome name={'trash'} size={40} color={Colors.dark.purpleDark}/>
@@ -116,7 +130,10 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
             {subtotal}
         </Text>
         </View>
-    </View>
+    </MotiView>
+     )}
+    </AnimatePresence>
+  
   );
 }
 
