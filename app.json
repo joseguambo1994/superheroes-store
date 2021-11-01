@@ -29,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": "Technical test for Todo 1 Company. Superheroes store is a e-commerce mobile application for employees and it has been developed having in mind day-to-day salesmen tasks. It has three main functions:  \n1.- Users sign up and sign in by email.  \n2.- CRUD operations for a list of products.  \n3.- Shopping cart. \n# Technical Stuff\nFront-End: React Native + Expo  \nBack-End: Firebase  \n",
+    "githubUrl": "https://github.com/joseguambo1994/superheroes-store.git"
   }
 }

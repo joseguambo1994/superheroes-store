@@ -104,7 +104,7 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
   }
 
   const getSubtotalPrice = (subtotalPerProduct : SubtotalPerProduct ) => {
-    if (parseFloat(subtotalPerProduct.subtotal) > 0){
+    if (parseFloat(subtotalPerProduct.subtotal) >= 0.00){
       const productIdTemporal = subtotalPerProduct.id
       const subtotalTemporal = subtotalPerProduct.subtotal
       setArrayOfSubtotals( (prevState) => {
@@ -118,7 +118,6 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
   }
 
   const handleDelete = (productId: string) => {
-      console.log("REMOVE",productId)
       removeKeyFromLocalStorage(productId)
       getAllKeys()
   }
@@ -148,7 +147,7 @@ export default function TabThreeScreen({ navigation }: RootTabScreenProps<'TabOn
       {
         productsKeys.length != 0 ? <View style={styles.totalPriceContainer}>
         
-        <Text style={styles.totalPriceText}> $ {totalPrice}</Text>
+        <Text style={styles.totalPriceText}> $ {totalPrice.toFixed(2)}</Text>
           <Text style={styles.totalPriceLabel}>TOTAL: {''}</Text>
         </View>
          : null

@@ -72,13 +72,27 @@ export default function ProductReceiptComponent(prop: ProductReceipt) {
         subtotal: subtotal,
         numberOfOrderedProducts: numberOfOrderedProducts,
       }
+      if (subtotal != null && subtotal != '' && !isNaN(parseFloat(subtotal))) {
         prop.getSubtotalPriceCallback(subtotalPerProduct)
+      }   
     }, [subtotal])
+
+    const handleDeleteOnChildren = () => {
+      const zeroedSubtotalPerProduct = {
+        id: prop.productId,
+        subtotal: '0.00',
+        numberOfOrderedProducts: numberOfOrderedProducts,
+      }
+      prop.getSubtotalPriceCallback(zeroedSubtotalPerProduct)
+      prop.handleDelete(prop.productId)
+    }
+
+    
 
   return (
     <View style={styles.container}>
        <View style={styles.removeContainer}>
-        <TouchableOpacity onPress={()=> prop.handleDelete(prop.productId)}>
+        <TouchableOpacity onPress={handleDeleteOnChildren}>
         <FontAwesome name={'trash'} size={40} color={Colors.dark.purpleDark}/>
         </TouchableOpacity>
         </View>
